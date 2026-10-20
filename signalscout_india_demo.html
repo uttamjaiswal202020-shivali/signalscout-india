@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>SignalScout India — Network & Speed Checker</title>
+<style>
+:root{--bg:#0b1220;--panel:#111c2e;--panel2:#16243a;--line:#263750;--text:#eef4ff;--muted:#9fb0c8;--cyan:#5eead4;--blue:#60a5fa;--amber:#fbbf24}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 500px at 80% -10%,#173b57 0%,transparent 60%),var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1120px;margin:auto;padding:24px 18px 60px}.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0 28px}.brand{font-weight:850;letter-spacing:-.5px;font-size:20px}.brand span{color:var(--cyan)}.tag{border:1px solid var(--line);border-radius:999px;padding:6px 11px;color:var(--muted);font-size:12px}
+.hero{padding:28px 0 24px;max-width:760px}.eyebrow{color:var(--cyan);font-weight:750;text-transform:uppercase;letter-spacing:1.5px;font-size:12px}.hero h1{font-size:clamp(34px,6vw,60px);line-height:1.04;letter-spacing:-2px;margin:12px 0 16px}.hero p{color:var(--muted);font-size:17px;max-width:650px;margin:0}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px;margin-top:22px}.card{background:linear-gradient(160deg,#142239,#0f192a);border:1px solid var(--line);border-radius:22px;padding:22px;min-width:0}.card h2{font-size:19px;margin:0 0 5px}.sub{color:var(--muted);font-size:13px;margin:0 0 18px}
+.locationrow{display:flex;gap:9px;margin:16px 0 12px}.input{min-width:0;flex:1;background:#0a1423;border:1px solid #30425c;border-radius:12px;color:var(--text);padding:13px 14px;font:inherit;outline:none}.input:focus{border-color:var(--cyan)}button{border:0;border-radius:12px;padding:12px 15px;font:700 14px system-ui;cursor:pointer;transition:transform .15s,opacity .15s}button:hover{transform:translateY(-1px)}button:disabled{opacity:.5;cursor:wait;transform:none}.primary{background:var(--cyan);color:#08231f}.secondary{background:#20324a;color:var(--text);border:1px solid #334963}.full{width:100%}.hint{font-size:12px;color:var(--muted)}.pillrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.pill{font-size:12px;padding:6px 10px;border-radius:999px;background:#0b1727;border:1px solid var(--line);color:#c5d3e7}
+.speedcenter{text-align:center;padding:10px 0 4px}.gauge{width:170px;height:170px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;background:conic-gradient(var(--cyan) 0deg,#24405a 0deg 360deg);position:relative}.gauge:before{content:"";position:absolute;inset:9px;background:#101b2c;border-radius:50%}.gaugeinner{position:relative}.speednum{font-size:35px;line-height:1;font-weight:850;letter-spacing:-1px}.unit{color:var(--muted);font-size:12px;margin-top:6px}.speedlabel{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1.4px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}.metric{background:#0b1727;border:1px solid var(--line);border-radius:13px;padding:12px 8px;text-align:center}.metric b{display:block;font-size:19px}.metric span{font-size:11px;color:var(--muted)}.section{margin-top:20px}.sectionhead{display:flex;align-items:end;justify-content:space-between;gap:10px;margin-bottom:12px}.sectionhead h2{font-size:22px;margin:0}.sectionhead p{font-size:12px;color:var(--muted);margin:0}
+.operators{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.op{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:15px;min-width:0}.ophead{display:flex;align-items:center;gap:9px;font-weight:800}.logo{height:34px;width:34px;border-radius:11px;display:grid;place-items:center;background:#1b3049;color:var(--cyan);font-size:13px}.op p{font-size:12px;color:var(--muted);margin:11px 0 0}.status{font-size:11px;color:var(--amber);margin-top:10px}.notice{margin-top:14px;padding:13px 15px;border-radius:13px;background:#241f15;border:1px solid #594827;color:#ead6a8;font-size:12px}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.step{padding:18px;border:1px solid var(--line);background:var(--panel);border-radius:16px}.step .num{color:var(--cyan);font-weight:850;font-size:12px}.step h3{margin:7px 0;font-size:16px}.step p{margin:0;color:var(--muted);font-size:13px}
+footer{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+#message{font-size:12px;color:var(--muted);min-height:20px;margin-top:8px}.tiny{font-size:11px;color:var(--muted)}a{color:var(--cyan)}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.operators{grid-template-columns:repeat(2,1fr)}.steps{grid-template-columns:1fr}.hero h1{letter-spacing:-1.2px}.nav{padding-bottom:16px}.card{padding:18px}.locationrow{flex-direction:column}.locationrow button{width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav"><div class="brand">◉ Signal<span>Scout</span> India</div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><a href="#about">About</a><a href="#contact">Contact</a><a href="#privacy">Privacy</a><div class="tag">EARLY DEMO · INDIA</div></div></nav>
+  <header class="hero">
+    <div class="eyebrow">Find your strongest signal</div>
+    <h1>Know your network<br>before you recharge.</h1>
+    <p>Compare mobile coverage information and measure the internet connection you're using. Built for people choosing a network across India.</p>
+  </header>
+  <main>
+    <div class="grid">
+      <section class="card">
+        <h2>Check your area</h2><p class="sub">Use GPS or enter a city, town or PIN code.</p>
+        <div class="locationrow"><input id="place" class="input" placeholder="e.g. Varanasi, 221001" aria-label="City or PIN code"><button class="primary" id="searchBtn">Check area</button></div>
+        <button class="secondary full" id="gpsBtn">◎ Use my current location</button>
+        <div id="locationMsg" class="hint" style="margin-top:10px">Location is optional. Your browser will ask before sharing GPS.</div>
+        <div class="pillrow"><span class="pill">4G / 5G</span><span class="pill">All India</span><span class="pill">Community-powered</span></div>
+        <div class="section">
+          <div class="sectionhead"><h2 style="font-size:16px">Coverage status</h2><p id="selectedPlace">No area selected</p></div>
+          <div style="border:1px dashed #3a506c;border-radius:15px;padding:18px;text-align:center;background:#0b1727">
+            <div style="font-size:26px">⌖</div><b id="coverageTitle">Coverage data not connected yet</b>
+            <p class="hint" id="coverageText" style="margin:6px 0 0">Select an area to prepare a report. This demo does not invent carrier coverage or signal strength.</p>
+          </div>
+        </div>
+      </section>
+      <section class="card">
+        <h2>Internet speed test</h2><p class="sub">Tests the connection on this device, not every carrier in your area.</p>
+        <div class="speedcenter">
+          <div class="gauge" id="gauge"><div class="gaugeinner"><div class="speednum" id="download">—</div><div class="unit">Mbps</div></div></div>
+          <div class="speedlabel" id="speedState">Ready to test</div>
+        </div>
+        <div class="metrics">
+          <div class="metric"><b id="upload">—</b><span>Upload Mbps</span></div>
+          <div class="metric"><b id="ping">—</b><span>Latency ms</span></div>
+          <div class="metric"><b id="jitter">—</b><span>Jitter ms</span></div>
+        </div>
+        <button class="primary full" id="testBtn">▶ Start speed test</button>
+        <div id="message">A working internet connection is required. Test results depend on device, signal and test-server route.</div>
+      </section>
+    </div>
+    <section class="section">
+      <div class="sectionhead"><h2>Compare telecom providers</h2><p>Coverage and speed rankings need verified data</p></div>
+      <div class="operators">
+        <article class="op"><div class="ophead"><div class="logo">J</div>Jio</div><p>Coverage report</p><div class="status">Awaiting local data</div></article>
+        <article class="op"><div class="ophead"><div class="logo">A</div>Airtel</div><p>Coverage report</p><div class="status">Awaiting local data</div></article>
+        <article class="op"><div class="ophead"><div class="logo">Vi</div>Vi</div><p>Coverage report</p><div class="status">Awaiting local data</div></article>
+        <article class="op"><div class="ophead"><div class="logo">B</div>BSNL</div><p>Coverage report</p><div class="status">Awaiting local data</div></article>
+      </div>
+      <div class="notice"><b>Important:</b> These provider cards are not a live ranking. To rank networks fairly, the production site needs carrier-specific coverage sources and many recent, location-tagged tests from users on each carrier. A speed test on one SIM cannot measure the other SIMs.</div>
+    </section>
+    <section class="section">
+      <div class="sectionhead"><h2>How it will work</h2><p>Low-cost launch plan</p></div>
+      <div class="steps">
+        <article class="step"><div class="num">01 / LOCATION</div><h3>Choose your area</h3><p>City, PIN code or consent-based GPS identifies the area for the coverage report.</p></article>
+        <article class="step"><div class="num">02 / MEASURE</div><h3>Run a speed test</h3><p>Measure download, upload and latency on the current connection; label device and test conditions.</p></article>
+        <article class="step"><div class="num">03 / COMPARE</div><h3>Build local evidence</h3><p>Aggregate recent tests by operator and area. Show sample size, test date and confidence—not guesses.</p></article>
+      </div>
+    </section>
+  </main>
+
+    <section class="section" id="about">
+      <div class="sectionhead"><h2>About SignalScout India</h2><p>Our mission</p></div>
+      <div class="card">
+        <p style="margin-top:0">SignalScout India is an independent project designed to help people in India understand mobile network coverage and compare internet performance in their area.</p>
+        <p style="color:var(--muted);margin-bottom:0"><strong>Founder &amp; Owner:</strong> Uttam Jaiswal</p>
+        <p class="hint">SignalScout India is an independent service and is not presented as an official website of Jio, Airtel, Vi, BSNL, or any other telecom operator.</p>
+      </div>
+    </section>
+    <section class="section" id="contact">
+      <div class="sectionhead"><h2>Contact Us</h2><p>Questions and feedback</p></div>
+      <div class="card">
+        <p style="margin-top:0">For feedback, corrections, or questions about SignalScout India, contact the owner:</p>
+        <p><strong>Uttam Jaiswal</strong></p>
+        <p>Business email: <a href="mailto:uttamjaiswal202020@gmail.com">uttamjaiswal202020@gmail.com</a></p>
+        <p>Phone: <a href="tel:9919151761">9919151761</a></p>
+        <p class="hint">Note: this information will be visible to anyone who visits the public website. Consider using a separate business number/email if you prefer to keep personal contact details private.</p>
+      </div>
+    </section>
+    <section class="section" id="privacy">
+      <div class="sectionhead"><h2>Privacy Policy</h2><p>Prototype policy · review before launch</p></div>
+      <div class="card">
+        <h3 style="margin-top:0">Information this prototype uses</h3>
+        <p>This prototype lets you enter an area manually or ask your browser for GPS coordinates. GPS access requires your permission. In this version, the location is displayed in the page and is not intentionally sent to a SignalScout India backend.</p>
+        <h3>Speed test</h3>
+        <p>The speed-test feature sends test requests to a third-party speed-test service. That service may receive technical information such as your IP address and request metadata. Its own privacy terms apply. Results may vary with your device, signal, browser, and server route.</p>
+        <h3>Storage and sharing</h3>
+        <p>This prototype does not include a SignalScout India account system or a database for saving test results. Do not enter passwords, financial details, or other sensitive information.</p>
+        <h3>Future features</h3>
+        <p>Before adding community reports, saved results, analytics, or a backend, this policy must be updated to explain what is collected, why it is collected, how long it is kept, who receives it, and how users can request deletion.</p>
+        <h3>Contact</h3>
+        <p>Privacy questions: <a href="mailto:uttamjaiswal202020@gmail.com">uttamjaiswal202020@gmail.com</a>.</p>
+        <p class="hint">This is a starter notice, not legal advice. Review it against the actual production implementation and applicable Indian law before launch.</p>
+      </div>
+    </section>
+
+  <footer><span>SignalScout India · Founder &amp; Owner: Uttam Jaiswal</span><span><a href="#about">About</a> · <a href="#contact">Contact</a> · <a href="#privacy">Privacy Policy</a></span></footer>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+let selectedLocation='';
+function setLocation(label,detail='Area selected. Live coverage data is not connected in this prototype.'){
+ selectedLocation=label;
+ $('selectedPlace').textContent=label;
+ $('locationMsg').textContent=detail;
+ $('coverageTitle').textContent='Coverage source not connected';
+ $('coverageText').textContent='Your area is recorded on this page only. Connect a verified coverage dataset to show provider-specific availability.';
+}
+$('searchBtn').addEventListener('click',()=>{
+ const p=$('place').value.trim();
+ if(!p){$('locationMsg').textContent='Enter a city, town or PIN code first.';return}
+ setLocation(p,'Area entered manually. No location is sent to a server.');
+});
+$('place').addEventListener('keydown',e=>{if(e.key==='Enter')$('searchBtn').click()});
+$('gpsBtn').addEventListener('click',()=>{
+ if(!navigator.geolocation){$('locationMsg').textContent='This browser does not support GPS location.';return}
+ $('gpsBtn').disabled=true;$('locationMsg').textContent='Waiting for location permission…';
+ navigator.geolocation.getCurrentPosition(pos=>{
+   const {latitude,longitude}=pos.coords;
+   setLocation(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`,'GPS location obtained in your browser. Coordinates are not sent to a server.');
+   $('gpsBtn').disabled=false;
+ },err=>{
+   $('locationMsg').textContent=err.code===1?'Location permission denied. You can enter a city or PIN code instead.':'Could not get location. Try again or enter a city/PIN code.';
+   $('gpsBtn').disabled=false;
+ },{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
+});
+function setGauge(mbps){
+ const deg=Math.max(0,Math.min(360,mbps/100*360));
+ $('gauge').style.background=`conic-gradient(var(--cyan) ${deg}deg,#24405a ${deg}deg 360deg)`;
+}
+async function timedFetch(url,options={}){
+ const start=performance.now();
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),25000);
+ try{
+   const response=await fetch(url,{...options,signal:controller.signal,mode:'cors',cache:'no-store'});
+   if(!response.ok)throw new Error('Test server returned HTTP '+response.status);
+   return {response,ms:performance.now()-start};
+ } finally { clearTimeout(timeout); }
+}
+$('testBtn').addEventListener('click',async()=>{
+ const btn=$('testBtn');btn.disabled=true;$('speedState').textContent='Testing…';$('message').textContent='Checking test-server access. Keep this page open.';
+ $('download').textContent='…';$('upload').textContent='…';$('ping').textContent='…';$('jitter').textContent='…';setGauge(0);
+ let downloadDone=false;
+ try{
+   // A zero-byte request measures request/response latency without downloading a large file.
+   const pings=[];
+   for(let i=0;i<4;i++){
+     const r=await timedFetch('https://speed.cloudflare.com/__down?bytes=0&cacheBust='+Date.now()+'-'+i);
+     await r.response.arrayBuffer();pings.push(r.ms);
+   }
+   const ping=pings.reduce((a,b)=>a+b,0)/pings.length;
+   const jitter=pings.slice(1).reduce((a,b,i)=>a+Math.abs(b-pings[i]),0)/(pings.length-1);
+   $('ping').textContent=Math.round(ping);$('jitter').textContent=Math.round(jitter);
+   $('message').textContent='Latency measured. Measuring download…';
+   // Moderate payload avoids unnecessarily consuming mobile data.
+   const bytes=4*1024*1024;
+   const started=performance.now();
+   const result=await timedFetch('https://speed.cloudflare.com/__down?bytes='+bytes+'&cacheBust='+Date.now());
+   const data=await result.response.arrayBuffer();
+   const elapsed=(performance.now()-started)/1000;
+   if(!data.byteLength || elapsed<=0)throw new Error('Download test returned no measurable data.');
+   const down=(data.byteLength*8/elapsed)/1e6;
+   $('download').textContent=down.toFixed(1);setGauge(down);downloadDone=true;
+   $('message').textContent='Download measured. Measuring upload…';
+   // Use text/plain to avoid a needless CORS preflight on some browser/server combinations.
+   const uploadBody='x'.repeat(256*1024);
+   const upStart=performance.now();
+   const upResult=await timedFetch('https://speed.cloudflare.com/__up',{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:uploadBody});
+   await upResult.response.arrayBuffer();
+   const upSec=(performance.now()-upStart)/1000;
+   const up=(uploadBody.length*8/upSec)/1e6;
+   $('upload').textContent=up.toFixed(1);$('speedState').textContent='Test complete';
+   $('message').textContent='Approximate result using Cloudflare test endpoints. Your browser must allow cross-origin requests; results vary by server route, signal and device.';
+ }catch(e){
+   $('speedState').textContent='Test could not finish';
+   const isFile=location.protocol==='file:';
+   $('message').textContent=isFile
+    ?'This page is opened directly as a downloaded file. Many browsers block speed-test requests from local files. Host this page on an HTTPS website (for example Cloudflare Pages) and try again.'
+    :'The test server request failed or was blocked by the browser/network. Try opening the page on HTTPS, disable data-saving/VPN temporarily, or try another connection. '+(e.name==='AbortError'?'The request timed out.':'No result was invented.');
+   if(!downloadDone)$('download').textContent='—';
+   if($('upload').textContent==='…')$('upload').textContent='—';
+   if($('ping').textContent==='…')$('ping').textContent='—';
+   if($('jitter').textContent==='…')$('jitter').textContent='—';
+ }finally{btn.disabled=false}
+});
+</script>
+</body>
+</html>
