@@ -64,16 +64,16 @@ footer{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;color:v
         <div id="message">A working internet connection is required. Test results depend on device, signal and test-server route.</div>
       </section>
     </div>
-    <section class="section">
+    <section class="section" id="official-maps">
       <div class="sectionhead"><h2>Compare telecom providers</h2><p>Coverage and speed rankings need verified data</p></div>
       <div class="operators">
-        <article class="op"><div class="ophead"><div class="logo">J</div>Jio</div><p>Coverage report</p><div class="status">Awaiting local data
+        <article class="op"><div class="ophead"><div class="logo">J</div>Jio</div><p>Official map · enter your area there</p><div class="status">Awaiting local data
 <a class="official-map-btn" href="https://www.jio.com/selfcare/coverage-map/" target="_blank" rel="noopener noreferrer">Open official Jio map ↗</a></div></article>
-        <article class="op"><div class="ophead"><div class="logo">A</div>Airtel</div><p>Coverage report</p><div class="status">Awaiting local data
+        <article class="op"><div class="ophead"><div class="logo">A</div>Airtel</div><p>Official map · enter your area there</p><div class="status">Awaiting local data
 <a class="official-map-btn" href="https://www.airtel.in/wirelesscoverage/?icid=footer" target="_blank" rel="noopener noreferrer">Open official Airtel map ↗</a></div></article>
-        <article class="op"><div class="ophead"><div class="logo">Vi</div>Vi</div><p>Coverage report</p><div class="status">Awaiting local data
+        <article class="op"><div class="ophead"><div class="logo">Vi</div>Vi</div><p>Official map · enter your area there</p><div class="status">Awaiting local data
 <a class="official-map-btn" href="https://www.myvi.in/vicoverage/" target="_blank" rel="noopener noreferrer">Open official Vi map ↗</a></div></article>
-        <article class="op"><div class="ophead"><div class="logo">B</div>BSNL</div><p>Coverage report</p><div class="status">Awaiting local data
+        <article class="op"><div class="ophead"><div class="logo">B</div>BSNL</div><p>Official map · enter your area there</p><div class="status">Awaiting local data
 <a class="official-map-btn" href="https://www.trai.gov.in/consumer-info/mobile-coverage-map/service-providers" target="_blank" rel="noopener noreferrer">Check BSNL map status on TRAI ↗</a></div></article>
       </div>
       <div class="notice"><b>Important:</b> These provider cards are not a live ranking. To rank networks fairly, the production site needs carrier-specific coverage sources and many recent, location-tagged tests from users on each carrier. A speed test on one SIM cannot measure the other SIMs.</div>
@@ -132,8 +132,8 @@ function setLocation(label,detail='Area selected. Live coverage data is not conn
  selectedLocation=label;
  $('selectedPlace').textContent=label;
  $('locationMsg').textContent=detail;
- $('coverageTitle').textContent='Coverage source not connected';
- $('coverageText').textContent='Your area is recorded on this page only. Connect a verified coverage dataset to show provider-specific availability.';
+ $('coverageTitle').textContent='Area selected — official maps available below';
+ $('coverageText').textContent=`Selected area: ${label}. SignalScout does not yet receive live carrier coverage data. Open a provider map below and enter the same city or PIN there to check its official coverage estimate.`;
 }
 $('searchBtn').addEventListener('click',()=>{
  const p=$('place').value.trim();
