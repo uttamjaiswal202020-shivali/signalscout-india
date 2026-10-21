@@ -18,10 +18,16 @@ footer{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;color:v
 #message{font-size:12px;color:var(--muted);min-height:20px;margin-top:8px}.tiny{font-size:11px;color:var(--muted)}a{color:var(--cyan)}
 @media(max-width:760px){.grid{grid-template-columns:1fr}.operators{grid-template-columns:repeat(2,1fr)}.steps{grid-template-columns:1fr}.hero h1{letter-spacing:-1.2px}.nav{padding-bottom:16px}.card{padding:18px}.locationrow{flex-direction:column}.locationrow button{width:100%}}
 </style>
+
+<style>
+.official-map-btn{display:inline-block;margin-top:10px;text-align:center;padding:10px 12px;border-radius:12px;border:1px solid #2a4354;background:#10243a;color:#65e5d2;text-decoration:none;font-weight:700;font-size:13px;line-height:1.35}
+.official-map-btn:focus,.official-map-btn:hover{filter:brightness(1.12)}
+</style>
+
 </head>
 <body>
 <div class="wrap">
-  <nav class="nav"><div class="brand">◉ Signal<span>Scout</span> India</div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><a href="#about">About</a><a href="#contact">Contact</a><a href="#privacy">Privacy</a><div class="tag">EARLY DEMO · INDIA</div></div></nav>
+  <nav class="nav"><div class="brand">◉ Signal<span>Scout</span> India</div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><a href="#about">About</a><a href="#contact">Contact</a><a href="#privacy">Privacy</a> <a href="#official-maps">Coverage maps</a><div class="tag">EARLY DEMO · INDIA</div></div></nav>
   <header class="hero">
     <div class="eyebrow">Find your strongest signal</div>
     <h1>Know your network<br>before you recharge.</h1>
@@ -61,10 +67,14 @@ footer{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;color:v
     <section class="section">
       <div class="sectionhead"><h2>Compare telecom providers</h2><p>Coverage and speed rankings need verified data</p></div>
       <div class="operators">
-        <article class="op"><div class="ophead"><div class="logo">J</div>Jio</div><p>Coverage report</p><div class="status">Awaiting local data</div></article>
-        <article class="op"><div class="ophead"><div class="logo">A</div>Airtel</div><p>Coverage report</p><div class="status">Awaiting local data</div></article>
-        <article class="op"><div class="ophead"><div class="logo">Vi</div>Vi</div><p>Coverage report</p><div class="status">Awaiting local data</div></article>
-        <article class="op"><div class="ophead"><div class="logo">B</div>BSNL</div><p>Coverage report</p><div class="status">Awaiting local data</div></article>
+        <article class="op"><div class="ophead"><div class="logo">J</div>Jio</div><p>Coverage report</p><div class="status">Awaiting local data
+<a class="official-map-btn" href="https://www.jio.com/selfcare/coverage-map/" target="_blank" rel="noopener noreferrer">Open official Jio map ↗</a></div></article>
+        <article class="op"><div class="ophead"><div class="logo">A</div>Airtel</div><p>Coverage report</p><div class="status">Awaiting local data
+<a class="official-map-btn" href="https://www.airtel.in/wirelesscoverage/?icid=footer" target="_blank" rel="noopener noreferrer">Open official Airtel map ↗</a></div></article>
+        <article class="op"><div class="ophead"><div class="logo">Vi</div>Vi</div><p>Coverage report</p><div class="status">Awaiting local data
+<a class="official-map-btn" href="https://www.myvi.in/vicoverage/" target="_blank" rel="noopener noreferrer">Open official Vi map ↗</a></div></article>
+        <article class="op"><div class="ophead"><div class="logo">B</div>BSNL</div><p>Coverage report</p><div class="status">Awaiting local data
+<a class="official-map-btn" href="https://www.trai.gov.in/consumer-info/mobile-coverage-map/service-providers" target="_blank" rel="noopener noreferrer">Check BSNL map status on TRAI ↗</a></div></article>
       </div>
       <div class="notice"><b>Important:</b> These provider cards are not a live ranking. To rank networks fairly, the production site needs carrier-specific coverage sources and many recent, location-tagged tests from users on each carrier. A speed test on one SIM cannot measure the other SIMs.</div>
     </section>
