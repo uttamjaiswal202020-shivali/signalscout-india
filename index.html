@@ -64,8 +64,8 @@ footer{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;color:v
         <select id="operator" class="input" style="width:100%;margin-bottom:10px" required>
           <option value="">Choose network</option><option value="Jio">Jio</option><option value="Airtel">Airtel</option><option value="Vi">Vi</option><option value="BSNL">BSNL</option>
         </select>
-        <label for="areaPin" class="hint" style="display:block;margin:4px 0 5px">Area PIN code (required to compare nearby results)</label>
-        <input id="areaPin" class="input" style="width:100%;margin-bottom:12px" inputmode="numeric" maxlength="6" placeholder="e.g. 221001" aria-label="Area PIN code">
+        <label for="areaPin" class="hint" style="display:block;margin:4px 0 5px">Area / city / PIN code (any one is fine)</label>
+        <input id="areaPin" class="input" style="width:100%;margin-bottom:12px" inputmode="text" maxlength="80" placeholder="e.g. Sigra, Varanasi or 221001" aria-label="Area, city or PIN code">
         <button class="primary full" id="testBtn">▶ Start speed test</button>
         <div id="message">A working internet connection is required. Test results depend on device, signal and test-server route.</div>
       </section>
@@ -120,7 +120,7 @@ footer{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;color:v
         <h3>Speed test</h3>
         <p>The speed-test feature sends test requests to a third-party speed-test service. That service may receive technical information such as your IP address and request metadata. Its own privacy terms apply. Results may vary with your device, signal, browser, and server route.</p>
         <h3>Storage and sharing</h3>
-        <p>When a user chooses a network and enters a 6-digit PIN code, the speed-test result (download, upload, latency, jitter, selected network, PIN code and timestamp) is sent to the SignalScout India Supabase database to support local comparisons. Do not enter passwords, financial details, or other sensitive information. Results can be approximate and depend on device, signal and test-server route.</p>
+        <p>When a user chooses a network and enters an area/locality name, city name, or PIN code, the speed-test result (download, upload, latency, jitter, selected network, entered area label and timestamp) is sent to the SignalScout India Supabase database to support local comparisons. Do not enter passwords, financial details, or other sensitive information. Results can be approximate and depend on device, signal and test-server route.</p>
         <h3>Future features</h3>
         <p>Before adding community reports, saved results, analytics, or a backend, this policy must be updated to explain what is collected, why it is collected, how long it is kept, who receives it, and how users can request deletion.</p>
         <h3>Contact</h3>
@@ -177,9 +177,9 @@ async function timedFetch(url,options={}){
 }
 $('testBtn').addEventListener('click',async()=>{
  const operator=$('operator').value;
- const areaPin=$('areaPin').value.trim();
+ const areaPin=$('areaPin').value.trim().replace(/\s+/g,' ');
  if(!operator){$('message').textContent='Please choose your SIM/network first.';return}
- if(!/^\d{6}$/.test(areaPin)){$('message').textContent='Please enter a valid 6-digit area PIN code.';return}
+ if(!areaPin || areaPin.length>80){$('message').textContent='Please enter an area, locality, city or PIN code (up to 80 characters).';return}
  const btn=$('testBtn');btn.disabled=true;$('speedState').textContent='Testing…';$('message').textContent='Checking test-server access. Keep this page open.';
  $('download').textContent='…';$('upload').textContent='…';$('ping').textContent='…';$('jitter').textContent='…';setGauge(0);
  let downloadDone=false;
@@ -215,7 +215,7 @@ $('testBtn').addEventListener('click',async()=>{
    $('message').textContent='Speed test complete. Saving result…';
    const saveResponse=await fetch(SUPABASE_URL+'/rest/v1/speed_tests',{method:'POST',headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Authorization':'Bearer '+SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({download_mbps:Number(down.toFixed(2)),upload_mbps:Number(up.toFixed(2)),ping_ms:Number(ping.toFixed(2)),jitter_ms:Number(jitter.toFixed(2)),operator:operator,area_pin:areaPin})});
    if(!saveResponse.ok){const detail=await saveResponse.text().catch(()=> '');throw new Error('Speed test worked, but saving to database failed (HTTP '+saveResponse.status+'). '+detail.slice(0,180));}
-   $('message').textContent='Result saved! Network: '+operator+' · PIN: '+areaPin+'. More tests from this area will help compare networks.';
+   $('message').textContent='Result saved! Network: '+operator+' · Area: '+areaPin+'. More tests from this area will help compare networks.';
  }catch(e){
    $('speedState').textContent='Test did not fully finish';
    const isFile=location.protocol==='file:';
