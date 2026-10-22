@@ -39,7 +39,7 @@ footer{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;color:v
         <h2>Check your area</h2><p class="sub">Use GPS or enter a city, town or PIN code.</p>
         <div class="locationrow"><input id="place" class="input" placeholder="e.g. Varanasi, 221001" aria-label="City or PIN code"><button class="primary" id="searchBtn">Check area</button></div>
         <button class="secondary full" id="gpsBtn">◎ Use my current location</button>
-        <div id="locationMsg" class="hint" style="margin-top:10px">Location is optional. Your browser will ask before sharing GPS.</div>
+        <div id="locationMsg" class="hint" style="margin-top:10px">Enter a city/locality or PIN, or use GPS. We will look for saved community tests for that area.</div>
         <div class="pillrow"><span class="pill">4G / 5G</span><span class="pill">All India</span><span class="pill">Community-powered</span></div>
         <div class="section">
           <div class="sectionhead"><h2 style="font-size:16px">Coverage status</h2><p id="selectedPlace">No area selected</p></div>
@@ -147,21 +147,46 @@ const $=id=>document.getElementById(id);
 let selectedLocation='';
 const SUPABASE_URL='https://kxihjajwuvjlnzezucyu.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_UEAmPHpEXCngsy7vPYoROg_Myy1LVBd';
-function setLocation(label,detail='Area selected. Live coverage data is not connected in this prototype.'){
+function setLocation(label,detail='Area selected. Checking saved community speed tests…'){
  selectedLocation=label;
  $('selectedPlace').textContent=label;
  $('locationMsg').textContent=detail;
- $('coverageTitle').textContent='Area selected — official maps available below';
- $('coverageText').textContent=`Selected area: ${label}. SignalScout does not yet receive live carrier coverage data. Open a provider map below and enter the same city or PIN there to check its official coverage estimate.`;
+ $('coverageTitle').textContent='Area selected';
+ $('coverageText').textContent=`Selected area: ${label}. We are checking saved community speed tests. Detailed results will appear below. Network signal strength is not measured directly by this speed test.`;
 }
-$('searchBtn').addEventListener('click',()=>{
- const p=$('place').value.trim().replace(/\s+/g,' ');
- if(!p){$('locationMsg').textContent='Enter a city, town, locality or PIN code first.';return}
- setLocation(p,'Searching saved community speed tests for this area.');
- $('areaPin').value=p;
- $('compareArea').value=p;
- loadComparison(p);
-});
+function updateCoverageLookup(area,result){
+ const rows=result && result.ok && Array.isArray(result.rows) ? result.rows : [];
+ if(!result || !result.ok){
+   $('coverageTitle').textContent='Could not load area results';
+   $('coverageText').textContent='The area was selected, but saved network results could not be loaded. Please try again. The comparison section below may show the error details.';
+   return;
+ }
+ if(!rows.length){
+   $('coverageTitle').textContent='No saved tests found yet';
+   $('coverageText').textContent=`No saved speed tests matched “${area}”. Try the same PIN, locality or city label people used when saving their tests. Official coverage maps are available below.`;
+   return;
+ }
+ const testCount=rows.reduce((total,row)=>total+Number(row.test_count||0),0);
+ $('coverageTitle').textContent='Community test data found';
+ $('coverageText').textContent=`Found ${testCount} saved test(s) across ${rows.length} network(s) for “${area}”. Detailed averages are shown in the comparison section below. This is measured internet performance, not a direct radio-signal-strength reading.`;
+}
+async function checkAreaAndShowResults(area){
+ const query=String(area||'').trim().replace(/\s+/g,' ');
+ if(!query){$('locationMsg').textContent='Enter a city, locality or PIN code first, or use your current location.';return}
+ $('searchBtn').disabled=true;
+ setLocation(query,'Checking saved community speed tests for '+query+'…');
+ $('areaPin').value=query;
+ $('compareArea').value=query;
+ try{
+   const result=await loadComparison(query);
+   updateCoverageLookup(query,result);
+   $('local-comparison').scrollIntoView({behavior:'smooth',block:'start'});
+ }catch(e){
+   $('coverageTitle').textContent='Could not load area results';
+   $('coverageText').textContent='Please retry the area search. '+String(e.message||e);
+ }finally{$('searchBtn').disabled=false}
+}
+$('searchBtn').addEventListener('click',()=>checkAreaAndShowResults($('place').value));
 $('place').addEventListener('keydown',e=>{if(e.key==='Enter')$('searchBtn').click()});
 $('gpsBtn').addEventListener('click',()=>{
  if(!navigator.geolocation){$('locationMsg').textContent='This browser does not support GPS location.';return}
@@ -170,10 +195,12 @@ $('gpsBtn').addEventListener('click',()=>{
    const {latitude,longitude}=pos.coords;
    // Round to 2 decimal places (~1 km cell) to avoid displaying exact coordinates.
    const gpsArea=`GPS ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
-   setLocation(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`,'Approximate GPS area selected (rounded for matching). You can search by city or PIN instead.');
    $('place').value=gpsArea;$('areaPin').value=gpsArea;$('compareArea').value=gpsArea;
-   loadComparison(gpsArea);
-   $('gpsBtn').disabled=false;
+   setLocation(gpsArea,'GPS location obtained. Checking saved tests recorded with this approximate GPS label. If none appear, search by city/locality or PIN instead.');
+   loadComparison(gpsArea).then(result=>updateCoverageLookup(gpsArea,result)).finally(()=>{
+     $('gpsBtn').disabled=false;
+     $('local-comparison').scrollIntoView({behavior:'smooth',block:'start'});
+   });
  },err=>{
    $('locationMsg').textContent=err.code===1?'Location permission denied. You can enter a city or PIN code instead.':'Could not get location. Try again or enter a city/PIN code.';
    $('gpsBtn').disabled=false;
@@ -231,16 +258,18 @@ async function loadComparison(area){
    const rows=await response.json();
    $('compareMessage').textContent='Comparison for: '+query+' · grouped averages from saved tests from the last 90 days.';
    renderComparison(rows,query);
+   return {ok:true,rows:Array.isArray(rows)?rows:[]};
  }catch(e){
-   $('compareMessage').textContent='Comparison could not load. The aggregate comparison SQL may not be enabled yet. '+e.message;
-   $('comparisonSummary').innerHTML='<div class="comparison-summary">Open Supabase SQL Editor and run the one-time comparison SQL file first. The speed test can still save reports while this read-only comparison is being enabled.</div>';
+   $('compareMessage').textContent='Comparison could not load. '+e.message;
+   $('comparisonSummary').innerHTML='<div class="comparison-summary">Saved network comparisons could not be loaded. Please retry. If this keeps happening, the Supabase comparison function or permissions need checking.</div>';
+   return {ok:false,error:e};
  }finally{$('compareBtn').disabled=false}
 }
-$('compareBtn').addEventListener('click',()=>{
+$('compareBtn').addEventListener('click',async()=>{
  const q=$('compareArea').value.trim().replace(/\s+/g,' ');
  if(!q){$('compareMessage').textContent='Enter a PIN, locality or city first.';return}
- $('place').value=q;$('areaPin').value=q;setLocation(q,'Comparing saved community speed tests for this area.');
- loadComparison(q);
+ $('place').value=q;$('areaPin').value=q;setLocation(q,'Comparing saved community speed tests for this area…');
+ const result=await loadComparison(q);updateCoverageLookup(q,result);
 });
 $('compareArea').addEventListener('keydown',e=>{if(e.key==='Enter')$('compareBtn').click()});
 
@@ -286,7 +315,9 @@ $('testBtn').addEventListener('click',async()=>{
    if(!saveResponse.ok){const detail=await saveResponse.text().catch(()=> '');throw new Error('Speed test worked, but saving to database failed (HTTP '+saveResponse.status+'). '+detail.slice(0,180));}
    $('message').textContent='Result saved! Network: '+operator+' · Area: '+areaPin+'. Refreshing the area comparison…';
    $('compareArea').value=areaPin;$('place').value=areaPin;
-   await loadComparison(areaPin);
+   const refreshedComparison=await loadComparison(areaPin);
+   setLocation(areaPin,'Your test was saved. Refreshed local network comparison.');
+   updateCoverageLookup(areaPin,refreshedComparison);
    $('message').textContent='Result saved! Network: '+operator+' · Area: '+areaPin+'. The comparison has been refreshed.';
  }catch(e){
    $('speedState').textContent='Test did not fully finish';
