@@ -55,7 +55,7 @@ footer{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;color:v
         </div>
       </section>
       <section class="card" id="speed-test">
-        <h2>2. Check your internet speed</h2><p class="sub">Measures the connection this device is using—not every carrier in your area.</p><p class="hint" style="margin-top:-8px">For a fair mobile-network comparison, turn Wi-Fi off, select the SIM providing mobile data, and enter your area.</p>
+        <h2>2. Check your internet speed</h2><p class="sub">Measures the connection this device is using—not every carrier in your area.</p><p class="hint" style="margin-top:-8px">Choose Wi-Fi / Broadband when this device is connected to Wi-Fi, or choose your SIM carrier to test mobile data. Area/PIN is optional: leave it blank to see and save your result without adding it to a local area comparison.</p>
         <div class="speedcenter">
           <div class="gauge" id="gauge"><div class="gaugeinner"><div class="speednum" id="download">—</div><div class="unit">Mbps</div></div></div>
           <div class="speedlabel" id="speedState">Ready to test</div>
@@ -65,12 +65,12 @@ footer{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;color:v
           <div class="metric"><b id="ping">—</b><span>Latency ms</span></div>
           <div class="metric"><b id="jitter">—</b><span>Jitter ms</span></div>
         </div>
-        <label for="operator" class="hint" style="display:block;margin:12px 0 5px">Which SIM/network are you testing?</label>
+        <label for="operator" class="hint" style="display:block;margin:12px 0 5px">Which connection are you testing?</label>
         <select id="operator" class="input" style="width:100%;margin-bottom:10px" required>
-          <option value="">Choose network</option><option value="Jio">Jio</option><option value="Airtel">Airtel</option><option value="Vi">Vi</option><option value="BSNL">BSNL</option>
+          <option value="">Choose connection type</option><option value="Jio">Jio (mobile data)</option><option value="Airtel">Airtel (mobile data)</option><option value="Vi">Vi (mobile data)</option><option value="BSNL">BSNL (mobile data)</option><option value="Wi-Fi / Broadband">Wi-Fi / Broadband</option>
         </select>
-        <label for="areaPin" class="hint" style="display:block;margin:4px 0 5px">Area / city / PIN code (any one is fine)</label>
-        <input id="areaPin" class="input" style="width:100%;margin-bottom:12px" inputmode="text" maxlength="80" placeholder="e.g. Sigra, Varanasi or 221001" aria-label="Area, city or PIN code">
+        <label for="areaPin" class="hint" style="display:block;margin:4px 0 5px">Area / city / PIN code (optional)</label>
+        <input id="areaPin" class="input" style="width:100%;margin-bottom:12px" inputmode="text" maxlength="80" placeholder="Optional — e.g. 227405 or Kanpur" aria-label="Optional area, city or PIN code">
         <button class="primary full" id="testBtn">▶ Start speed test</button>
         <div id="message">A working internet connection is required. Test results depend on device, signal and test-server route.</div>
       </section>
@@ -104,7 +104,7 @@ footer{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;color:v
       <div class="sectionhead"><h2>How to use SignalScout</h2><p>Three simple tools</p></div>
       <div class="steps">
         <article class="step"><div class="num">01 / FIND</div><h3>Search your area</h3><p>Use a city, locality, PIN code or your current location. We show matching saved tests and official map links.</p></article>
-        <article class="step"><div class="num">02 / TEST</div><h3>Measure your connection</h3><p>Run a speed test, select the SIM being used and save the result with your area label.</p></article>
+        <article class="step"><div class="num">02 / TEST</div><h3>Measure your connection</h3><p>Run a speed test, choose the SIM carrier or Wi-Fi/Broadband, and optionally add your area to contribute to local comparisons.</p></article>
         <article class="step"><div class="num">03 / COMPARE</div><h3>Compare the providers</h3><p>Review average download/upload, latency, jitter, number of tests and the latest test date for each network.</p></article>
       </div>
     </section>
@@ -132,11 +132,11 @@ footer{border-top:1px solid var(--line);margin-top:30px;padding-top:18px;color:v
       <div class="sectionhead"><h2>Privacy Policy</h2><p>Prototype policy · review before launch</p></div>
       <div class="card">
         <h3 style="margin-top:0">Information this prototype uses</h3>
-        <p>You can enter a city, locality or PIN, or choose GPS. With permission, GPS coordinates are sent to BigDataCloud's reverse-geocoding service to estimate the nearby postcode, locality and city. The website then searches community test records for those place labels. SignalScout India does not save the raw GPS coordinates in the speed-test record. The lookup provider processes the request under its own terms and privacy policy.</p>
+        <p>You can enter a city, locality or PIN, or choose GPS. With permission, GPS coordinates may be sent to BigDataCloud or OpenStreetMap's Nominatim reverse-geocoding service to estimate the nearby postcode, locality and city. The website then searches community test records for those place labels. SignalScout India does not save the raw GPS coordinates in the speed-test record. The lookup provider processes the request under its own terms and privacy policy.</p>
         <h3>Speed test</h3>
         <p>The speed-test feature sends test requests to a third-party speed-test service. That service may receive technical information such as your IP address and request metadata. Its own privacy terms apply. Results may vary with your device, signal, browser, and server route.</p>
         <h3>Storage and sharing</h3>
-        <p>When a user chooses a network and enters an area/locality name, city name, or PIN code, the speed-test result (download, upload, latency, jitter, selected network, entered area label and timestamp) is sent to the SignalScout India Supabase database to support local comparisons. The comparison page returns aggregated averages and test counts by operator for matching area labels; it does not expose raw individual test rows. Do not enter passwords, financial details, or other sensitive information. Results can be approximate and depend on device, signal and test-server route.</p>
+        <p>When a user runs a speed test, the result (download, upload, latency, jitter, selected connection type, optional area label and timestamp) is sent to the SignalScout India Supabase database. If no PIN/city is provided, the area value is stored as empty and the test is not used in a local area comparison. Wi-Fi/Broadband tests are recorded separately from mobile-SIM tests and are not used to rank Jio, Airtel, Vi or BSNL. The comparison page returns aggregated averages and test counts for matching area labels; it does not expose raw individual test rows. Do not enter passwords, financial details, or other sensitive information. Results can be approximate and depend on device, signal and test-server route.</p>
         <h3>Limits and accuracy</h3>
         <p>Results depend on the submitted area labels and the number and age of community tests. The site can name a speed leader only when there are at least three saved tests for each of at least two networks. This speed ranking does not directly measure radio signal strength and is not a guarantee of service at a particular building.</p>
         <h3>Contact</h3>
@@ -192,7 +192,6 @@ async function checkAreaAndShowResults(area){
  try{
    const result=await loadComparison(query);
    updateCoverageLookup(query,result);
-   $('local-comparison').scrollIntoView({behavior:'smooth',block:'start'});
  }catch(e){
    $('coverageTitle').textContent='Could not load area results';
    $('coverageText').textContent='Please retry the area search. '+String(e.message||e);
@@ -201,16 +200,44 @@ async function checkAreaAndShowResults(area){
 $('searchBtn').addEventListener('click',()=>checkAreaAndShowResults($('place').value));
 $('place').addEventListener('keydown',e=>{if(e.key==='Enter')$('searchBtn').click()});
 async function reverseGeocodeCurrentLocation(latitude,longitude){
- // This keyless endpoint is intended for live coordinates obtained with the user's permission.
- const url='https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+encodeURIComponent(latitude)+'&longitude='+encodeURIComponent(longitude)+'&localityLanguage=en';
- const response=await fetch(url,{method:'GET',mode:'cors',cache:'no-store'});
- if(!response.ok) throw new Error('Location lookup returned HTTP '+response.status);
- const data=await response.json();
- const candidates=[];
- const add=v=>{const t=String(v||'').trim();if(t&&!candidates.some(x=>x.toLowerCase()===t.toLowerCase()))candidates.push(t)};
- // Prefer PIN codes because the first test result was saved using a PIN.
- add(data.postcode);add(data.locality);add(data.city);
- return {candidates,postcode:String(data.postcode||'').trim(),locality:String(data.locality||'').trim(),city:String(data.city||'').trim(),state:String(data.principalSubdivision||'').trim()};
+ const uniqueCandidates=values=>{
+   const out=[];
+   for(const value of values){
+     const text=String(value||'').trim();
+     if(text&&!out.some(x=>x.toLowerCase()===text.toLowerCase()))out.push(text);
+   }
+   return out;
+ };
+ // Primary reverse-geocoder. Browser location permission is requested separately below.
+ try{
+   const url='https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+encodeURIComponent(latitude)+'&longitude='+encodeURIComponent(longitude)+'&localityLanguage=en';
+   const response=await fetch(url,{method:'GET',mode:'cors',cache:'no-store'});
+   if(!response.ok)throw new Error('Primary location lookup returned HTTP '+response.status);
+   const data=await response.json();
+   const postcode=String(data.postcode||'').trim();
+   const locality=String(data.locality||data.localityInfo?.administrative?.[2]?.name||'').trim();
+   const city=String(data.city||data.localityInfo?.administrative?.[1]?.name||'').trim();
+   const candidates=uniqueCandidates([postcode,locality,city]);
+   if(candidates.length)return {candidates,postcode,locality,city,state:String(data.principalSubdivision||'').trim()};
+   throw new Error('Primary lookup returned no area labels');
+ }catch(primaryError){
+   // Fallback geocoder: useful if the primary service is temporarily blocked/unavailable.
+   try{
+     const url='https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+encodeURIComponent(latitude)+'&lon='+encodeURIComponent(longitude)+'&zoom=18&addressdetails=1';
+     const response=await fetch(url,{method:'GET',mode:'cors',cache:'no-store'});
+     if(!response.ok)throw new Error('Backup location lookup returned HTTP '+response.status);
+     const data=await response.json();
+     const a=data.address||{};
+     const postcode=String(a.postcode||'').trim();
+     const locality=String(a.suburb||a.neighbourhood||a.quarter||a.village||a.town||a.city_district||a.municipality||'').trim();
+     const city=String(a.city||a.town||a.village||a.municipality||a.county||a.state_district||'').trim();
+     const candidates=uniqueCandidates([postcode,locality,city]);
+     if(!candidates.length)throw new Error('Backup lookup returned no PIN/locality/city');
+     return {candidates,postcode,locality,city,state:String(a.state||'').trim()};
+   }catch(backupError){
+     throw new Error('GPS located your device, but automatic PIN/locality lookup failed. Please enter your PIN or city manually.');
+   }
+ }
 }
 async function findFirstSavedMatch(candidates){
  let last={ok:true,rows:[] ,matchedQuery:candidates[0]||''};
@@ -223,34 +250,46 @@ async function findFirstSavedMatch(candidates){
  return last;
 }
 $('gpsBtn').addEventListener('click',()=>{
- if(!navigator.geolocation){$('locationMsg').textContent='This browser does not support GPS location.';return}
- $('gpsBtn').disabled=true;$('locationMsg').textContent='Getting your location and identifying the nearby PIN/locality…';
+ if(!navigator.geolocation){
+   $('locationMsg').textContent='This browser does not support location. Please enter your PIN, locality or city manually.';
+   return;
+ }
+ $('gpsBtn').disabled=true;
+ $('locationMsg').textContent='Waiting for location permission… Please choose Allow if your browser asks.';
  navigator.geolocation.getCurrentPosition(async pos=>{
    try{
      const {latitude,longitude}=pos.coords;
      const geo=await reverseGeocodeCurrentLocation(latitude,longitude);
-     if(!geo.candidates.length) throw new Error('No postcode, locality or city could be resolved for this location.');
-     const primaryArea=geo.postcode||geo.locality||geo.city;
-     const resolvedLabels=[geo.postcode,geo.locality,geo.city,geo.state].filter((v,i,a)=>v&&a.findIndex(x=>String(x).toLowerCase()===String(v).toLowerCase())===i);
-     // Search precise postcode first, then locality and city if people used those labels.
      const result=await findFirstSavedMatch(geo.candidates);
-     const searchLabel=(result.ok && result.rows && result.rows.length) ? result.matchedQuery : (geo.city||geo.locality||primaryArea);
+     const searchLabel=(result.ok&&result.rows&&result.rows.length)
+       ? result.matchedQuery
+       : (geo.postcode||geo.locality||geo.city||geo.candidates[0]||'');
      $('place').value=searchLabel;
-     // Save a composite label for future tests so either postcode, locality, or city can match.
-     $('areaPin').value=resolvedLabels.slice(0,3).join(', ')||primaryArea;
+     // Store one consistent place label, not a comma-joined list, so later tests can match it.
+     $('areaPin').value=searchLabel;
      $('compareArea').value=searchLabel;
-     setLocation(searchLabel,'GPS resolved to '+resolvedLabels.join(', ')+'. '+((result.ok && result.rows && result.rows.length)?'Saved tests were found using '+result.matchedQuery+'.':'No saved tests matched these resolved place labels yet. Try the same PIN/locality label used when previous tests were saved.') );
+     const resolved=geo.candidates.join(', ');
+     setLocation(searchLabel,'GPS found your area: '+resolved+'. '+((result.ok&&result.rows&&result.rows.length)
+       ? 'Saved community tests were found for '+result.matchedQuery+'.'
+       : 'No saved tests match this area yet. You can still run a speed test; use the same PIN/locality label for future local comparisons.'));
      updateCoverageLookup(searchLabel,result);
-     $('local-comparison').scrollIntoView({behavior:'smooth',block:'start'});
    }catch(e){
-     $('locationMsg').textContent='GPS found your position, but could not convert it to a PIN/city. Please enter your PIN, locality or city manually. '+String(e.message||e);
-     $('coverageTitle').textContent='Location lookup unavailable';
-     $('coverageText').textContent='Your GPS coordinates were not matched directly to saved tests. Enter a PIN, locality or city name to search.';
-   }finally{$('gpsBtn').disabled=false}
+     $('locationMsg').textContent=String(e.message||'Location lookup failed.')+' If location access was blocked, open Chrome site settings, set Location to Allow, then try again.';
+     $('coverageTitle').textContent='Could not identify the nearby area';
+     $('coverageText').textContent='Your browser may have supplied GPS coordinates, but the automatic address lookup did not complete. Enter a PIN, locality or city manually. No exact GPS coordinates are stored in your speed-test record.';
+   }finally{
+     $('gpsBtn').disabled=false;
+   }
  },err=>{
-   $('locationMsg').textContent=err.code===1?'Location permission denied. You can enter a city or PIN code instead.':'Could not get location. Try again or enter a city/PIN code.';
+   if(err.code===1){
+     $('locationMsg').textContent='Location permission was denied or blocked. In Chrome, tap the icon beside the address bar → Permissions → Location → Allow, reload the page, and try again. You can also enter a PIN or city manually.';
+   }else if(err.code===3){
+     $('locationMsg').textContent='Getting your location timed out. Turn on device Location/GPS and try again, or enter your PIN/city manually.';
+   }else{
+     $('locationMsg').textContent='Your device could not determine the location. Turn on Location/GPS and try again, or enter your PIN/city manually.';
+   }
    $('gpsBtn').disabled=false;
- },{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
+ },{enableHighAccuracy:true,timeout:20000,maximumAge:30000});
 });
 function setGauge(mbps){
  const deg=Math.max(0,Math.min(360,mbps/100*360));
@@ -322,11 +361,12 @@ $('compareArea').addEventListener('keydown',e=>{if(e.key==='Enter')$('compareBtn
 $('testBtn').addEventListener('click',async()=>{
  const operator=$('operator').value;
  const areaPin=$('areaPin').value.trim().replace(/\s+/g,' ');
- if(!operator){$('message').textContent='Please choose your SIM/network first.';return}
- if(!areaPin || areaPin.length>80){$('message').textContent='Please enter an area, locality, city or PIN code (up to 80 characters).';return}
+ if(!operator){$('message').textContent='Please choose your connection type first.';return}
+ if(areaPin.length>80){$('message').textContent='Area text can be up to 80 characters. Clear it or enter a shorter area label.';return}
  const btn=$('testBtn');btn.disabled=true;$('speedState').textContent='Testing…';$('message').textContent='Checking test-server access. Keep this page open.';
  $('download').textContent='…';$('upload').textContent='…';$('ping').textContent='…';$('jitter').textContent='…';setGauge(0);
  let downloadDone=false;
+ let measurementComplete=false;
  try{
    // A zero-byte request measures request/response latency without downloading a large file.
    const pings=[];
@@ -356,17 +396,24 @@ $('testBtn').addEventListener('click',async()=>{
    const upSec=(performance.now()-upStart)/1000;
    const up=(uploadBody.length*8/upSec)/1e6;
    $('upload').textContent=up.toFixed(1);$('speedState').textContent='Test complete';
+   measurementComplete=true;
    $('message').textContent='Speed test complete. Saving result…';
-   const saveResponse=await fetch(SUPABASE_URL+'/rest/v1/speed_tests',{method:'POST',headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Authorization':'Bearer '+SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({download_mbps:Number(down.toFixed(2)),upload_mbps:Number(up.toFixed(2)),ping_ms:Number(ping.toFixed(2)),jitter_ms:Number(jitter.toFixed(2)),operator:operator,area_pin:areaPin})});
+   const saveResponse=await fetch(SUPABASE_URL+'/rest/v1/speed_tests',{method:'POST',headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'Authorization':'Bearer '+SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({download_mbps:Number(down.toFixed(2)),upload_mbps:Number(up.toFixed(2)),ping_ms:Number(ping.toFixed(2)),jitter_ms:Number(jitter.toFixed(2)),operator:operator,area_pin:areaPin||null})});
    if(!saveResponse.ok){const detail=await saveResponse.text().catch(()=> '');throw new Error('Speed test worked, but saving to database failed (HTTP '+saveResponse.status+'). '+detail.slice(0,180));}
-   $('message').textContent='Result saved! Network: '+operator+' · Area: '+areaPin+'. Refreshing the area comparison…';
+   if(!areaPin){
+     $('message').textContent='Result saved! Connection: '+operator+'. No area was entered, so this result is not included in local area comparisons. Add a PIN/locality next time to help compare networks nearby.';
+     $('coverageTitle').textContent='Speed test saved — no area entered';
+     $('coverageText').textContent='Your download, upload, ping and jitter results were saved. Because no PIN/city was provided, this test is not assigned to a location and will not affect a local network ranking.';
+     return;
+   }
+   $('message').textContent='Result saved! Connection: '+operator+' · Area: '+areaPin+'. Refreshing the area comparison…';
    $('compareArea').value=areaPin;$('place').value=areaPin;
    const refreshedComparison=await loadComparison(areaPin);
    setLocation(areaPin,'Your test was saved. Refreshed local network comparison.');
    updateCoverageLookup(areaPin,refreshedComparison);
-   $('message').textContent='Result saved! Network: '+operator+' · Area: '+areaPin+'. The comparison has been refreshed.';
+   $('message').textContent='Result saved! Connection: '+operator+' · Area: '+areaPin+'. The comparison has been refreshed.';
  }catch(e){
-   $('speedState').textContent='Test did not fully finish';
+   $('speedState').textContent=measurementComplete?'Speed measured · save failed':'Test did not fully finish';
    const isFile=location.protocol==='file:';
    $('message').textContent=e.message && e.message.startsWith('Speed test worked, but saving')
     ? e.message+' Check the Supabase INSERT policy and column names.'
